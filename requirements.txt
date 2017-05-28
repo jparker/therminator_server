@@ -1,0 +1,12 @@
+appdirs==1.4.3
+click==6.7
+Flask==0.12.2
+Flask-Login==0.4.0
+itsdangerous==0.24
+Jinja2==2.9.6
+MarkupSafe==1.0
+packaging==16.8
+pyparsing==2.2.0
+six==1.10.0
+-e git+git@github.com:jparker/therminator_server.git@2d9d211a27d459954c6688be2857c3cd17fda491#egg=therminator
+Werkzeug==0.12.2
