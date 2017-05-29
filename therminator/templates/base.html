@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>
+      Therminator
+      {% if self.title() %}/ {% block title %}{% endblock %}{% endif %}
+    </title> 
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1 shrink-to-fit=no">
+    <link rel="stylesheet"
+          href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+          integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
+          crossorigin="anonymous">
+    <link rel="stylesheet"
+          href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css"
+          integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp"
+          crossorigin="anonymous">
+    <link rel="stylesheet" href="{{ url_for('static', filename='base.css') }}">
+  </head>
+  <body>
+    <nav class="navbar navbar-default">
+      <div class="container-fluid">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="navbar-collapse" aria-expanded="false">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="/">Therminator</a>
+        </div>
+        <div class="collapse navbar-collapse" id="navbar-collapse">
+          {% if current_user.is_authenticated %}
+            <ul class="nav navbar-nav navbar-right">
+              <li>
+                <a href="#" data-toggle="dropdown">
+                  Signed in as {{ current_user.name }}
+                  <span class="caret"></span>
+                </a>
+                <ul class="dropdown-menu">
+                  <li>
+                    <a href="{{ url_for('sign_out') }}">
+                      <span class="glyphicon glyphicon-log-out" aria-hidden="true"></span>
+                      Sign out
+                    </a>
+                  </li>
+                </ul>
+              </li>
+            </ul>
+          {% else %}
+            <p class="navbar-text navbar-right">
+            <a class="navbar-link" href="{{ url_for('sign_in') }}">Sign in</a>.
+            </p>
+          {% endif %}
+        </div>
+      </div>
+    </nav>
+    <div class="container">
+      {% with messages = get_flashed_messages(with_categories=True) %}
+        {% for category, msg in messages %}
+          <div class="alert alert-{{ category }} alert-dismissable" role="alert">
+            <button type="button" class="close" data-dismiss="alert" aria-label="close">
+              <span class="glyphicon glyphicon-remove" aria-hidden="true"> </span>
+              <span class="sr-only">Dismiss</span>
+            </button>
+            {% if category == 'success' %}
+              <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
+            {% elif category == 'danger' %}
+              <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+            {% else %}
+              <span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>
+            {% endif %}
+            {{ msg }}
+          </div>
+        {% endfor %}
+      {% endwith %}
+
+      {% block content %}{% endblock %}
+
+    </div>
+    <script src="https://code.jquery.com/jquery-3.1.1.slim.min.js"
+            integrity="sha384-A7FZj7v+d/sdmMqp/nOQwliLvUsJfDHW+k9Omg/a/EheAdgtzNs3hpfag6Ed950n"
+            crossorigin="anonymous">
+    </script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
+            integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
+            crossorigin="anonymous">
+    </script>
+    <script src="https://use.fontawesome.com/0023b647d4.js"></script>
+  </body>
+</html>

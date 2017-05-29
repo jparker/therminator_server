@@ -4,7 +4,7 @@ import unittest
 from therminator import app, db
 
 
-class TherminatorTestCase(TestCase):
+class TestCase(TestCase):
     def setUp(self):
         db.create_all()
         db.session.commit()

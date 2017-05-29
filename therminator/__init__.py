@@ -15,4 +15,4 @@ bcrypt = Bcrypt(app)
 login_manager = LoginManager()
 login_manager.init_app(app)
 
-import therminator.views, therminator.api.views
+import therminator.views

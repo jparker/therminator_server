@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block title %} Sign in {% endblock %}
+{% block content %}
+<div class="row">
+  <div class="col-sm-6 col-sm-offset-3">
+    <h1>Therminator <small>Sign in</small></h1>
+    <form method="post" action="{{ url_for('sign_in') }}">
+      <input type="hidden" name="next" value="{{ target or '' }}">
+      {{ form.csrf_token }}
+      <div class="form-group form-group-lg">
+        {{ form.email.label(class='control-label') }}
+        {{ form.email(class='form-control', autofocus=True) }}
+      </div>
+      <div class="form-group form-group-lg">
+        {{ form.password.label(class='control-label') }}
+        {{ form.password(class='form-control') }}
+      </div>
+      <button type="submit" class="btn btn-primary btn-lg">
+        Sign in
+      </button>
+    </form>
+  </div>
+</div>
+{% endblock %}

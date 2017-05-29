@@ -24,6 +24,15 @@ class User(db.Model, UserMixin):
     def __repr__(self):
         return '<User id={} email={}>'.format(self.id, self.email)
 
+    def is_correct_password(self, plaintext):
+        return bcrypt.check_password_hash(self.password, plaintext)
+
+    @validates('name')
+    def validates_name(self, key, value):
+        if not value:
+            raise ValueError("name can't be blank")
+        return value
+
     @validates('password')
     def validates_password(self, key, value):
         return bcrypt.generate_password_hash(
