@@ -18,7 +18,7 @@ class Test(Base):
     BCRYPT_LOG_ROUNDS = os.getenv('BCRYPT_LOG_ROUNDS', 4)
     DEBUG = True
     SECRET_KEY = 'deadbeef'
-    SQLALCHEMY_DATABASE_URI = 'postgres:///therminator_test'
+    SQLALCHEMY_DATABASE_URI = 'postgres://therminator:awooga@localhost:32768/therminator_test'
     TESTING = True
 
 class Production(Base):
