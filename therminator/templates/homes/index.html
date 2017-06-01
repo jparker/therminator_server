@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block title %} Homes {% endblock %}
+{% block content %}
+<h1>Homes</h1>
+
+<table class="table table-hover table-striped">
+  <thead>
+    <tr>
+      <th class="min"></th>
+      <th>Name</th>
+      <th>Timezone</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for home in homes %}
+    <tr>
+      <td class="min">
+        <a href="{{ url_for("show_home", home_id=home.id) }}" class="btn btn-default btn-xs">
+          <span class="glyphicon glyphicon-home"></span>
+        </a>
+      </td>
+      <td>
+        <a href="{{ url_for("show_home", home_id=home.id) }}">{{ home.name }}</a>
+      </td>
+      <td>
+        {{ home.timezone }}
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

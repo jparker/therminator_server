@@ -9,7 +9,9 @@ Flask-Login==0.4.0
 Flask-Migrate==2.0.3
 Flask-Script==2.0.5
 Flask-SQLAlchemy==2.2
+Flask-SSLify==0.1.5
 Flask-Testing==0.6.2
+Flask-WTF==0.14.2
 itsdangerous==0.24
 Jinja2==2.9.6
 Mako==1.0.6
@@ -22,7 +24,9 @@ pyparsing==2.2.0
 pytest==3.1.0
 python-dateutil==2.6.0
 python-editor==1.0.3
+pytz==2017.2
 six==1.10.0
 SQLAlchemy==1.1.10
--e git+git@github.com:jparker/therminator_server.git@e7c6c68429867d8f92de9a5a9bca4b7bcd4e02cd#egg=therminator
+-e git+git@github.com:jparker/therminator_server.git@8966575bfc6829d7bb735c378d9ad3d586fb62df#egg=therminator
 Werkzeug==0.12.2
+WTForms==2.1

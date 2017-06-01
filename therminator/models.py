@@ -1,7 +1,17 @@
 from . import app, db, bcrypt
 from flask_login import UserMixin
+from functools import wraps
 from sqlalchemy.orm import validates
 import sqlalchemy.dialects.postgresql as psql
+
+def validates_presence(f):
+    @wraps(f)
+    def validator(self, key, value):
+        if value is None:
+            raise ValueError("{} can't be blank".format(key))
+        return f(self, key, value)
+    return validator
+
 
 class User(db.Model, UserMixin):
     __tablename__ = 'users'
@@ -119,19 +129,19 @@ class Reading(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     sensor_id = db.Column(db.Integer, db.ForeignKey('sensors.id'), nullable=False)
     timestamp = db.Column(db.DateTime, nullable=False)
-    int_temp = db.Column(db.Float, nullable=False)
+    int_temp = db.Column(db.Float, nullable=False, server_default='0.0')
     ext_temp = db.Column(db.Float, nullable=False)
-    humidity = db.Column(db.Float, nullable=False)
-    resistance = db.Column(db.Float, nullable=False)
+    humidity = db.Column(db.Float, nullable=False, server_default='0.0')
+    resistance = db.Column(db.Float, nullable=False, server_default='0.0')
 
     def __init__(
-        self,
-        sensor,
-        timestamp,
-        int_temp,
-        ext_temp,
-        humidity,
-        resistance
+            self,
+            sensor,
+            timestamp=None,
+            int_temp=None,
+            ext_temp=None,
+            humidity=None,
+            resistance=None,
     ):
         self.sensor = sensor
         self.timestamp = timestamp
@@ -151,9 +161,49 @@ class Reading(db.Model):
 
     def as_dict(self):
         return dict(
-            timestamp=self.timestamp.isoformat(),
+            timestamp=self.timestamp.strftime('%Y-%m-%dT%H:%MZ'),
             int_temp=self.int_temp,
             ext_temp=self.ext_temp,
             humidity=self.humidity,
             resistance=self.resistance,
         )
+
+    def int_temp_f(self):
+        return self.int_temp * 9/5 + 32
+
+    def ext_temp_f(self):
+        return self.ext_temp * 9/5 + 32
+
+    def luminosity(self):
+        if self.resistance > 0:
+            return 10**6 / self.resistance
+        else:
+            return None
+
+    @validates('timestamp')
+    @validates_presence
+    def validate_timestamp(self, key, value):
+        return value
+
+    @validates('ext_temp')
+    @validates_presence
+    def validate_ext_temp(self, key, value):
+        return value
+
+    @validates('humidity')
+    @validates_presence
+    def validate_humidity(self, key, value):
+        try:
+            value = float(value)
+            if value < 0 or value > 100:
+                raise ValueError('humidity must be between 0 and 100')
+        except TypeError as e:
+            raise ValueError('humidity must be a number') from e
+        return value
+
+    @validates('resistance')
+    @validates_presence
+    def validate_resistance(self, key, value):
+        if value < 0:
+            raise ValueError('resistance must be greater than or equal to 0')
+        return value

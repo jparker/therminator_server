@@ -1,0 +1,89 @@
+{% extends "base.html" %}
+{% block title %} {{ sensor.name }} {% endblock %}
+{% block content %}
+<h1>
+  {{ date.strftime("%b %-d, %Y") }} <small>{{ sensor.name }}</small>
+  <div class="pull-right">
+    <a href="{{ url_for("show_home", home_id=home.id) }}" class="btn btn-default">
+      <span class="glyphicon glyphicon-level-up"></span>
+      Return to Home
+    </a>
+  </div>
+</h1>
+
+<table class="table table-bordered table-detail">
+  <tr>
+    <th>Name</th>
+    <td>{{ sensor.name }}</td>
+  </tr>
+  <tr>
+    <th>UUID</th>
+    <td>{{ sensor.uuid }}</td>
+  </tr>
+  <tr>
+    <th>API Endpoint</th>
+    <td>
+      <a href="{{ url_for("api_v1_create_reading", sensor_uuid=sensor.uuid) }}">
+        {{ url_for("api_v1_create_reading", sensor_uuid=sensor.uuid, _external=True) }}
+      </a>
+    </td>
+  </tr>
+</table>
+
+{% include "sensors/pager.html" %}
+
+<div id="chart"
+     data-date="{{ date.isoformat() }}"
+     data-source="{{ url_for('api_v1_list_readings', sensor_uuid=sensor.uuid, date=date) }}">
+</div>
+
+<table class="table table-bordered table-hover table-striped">
+  <thead>
+    <tr>
+      <th>Timestamp</th>
+      <th class="number">Internal</th>
+      <th class="number">External</th>
+      <th class="number">Humidity</th>
+      <th class="number">Luminosity</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for reading in readings %}
+    <tr>
+      <td>
+        {{ reading.timestamp|localtime(timezone=home.timezone) }}
+      </td>
+      <td class="number">
+        <div class="pull-left text-muted">
+          <small>{{ reading.int_temp|round(1) }}&#x2103;</small>
+        </div>
+        {{ reading.int_temp_f()|round(1) }}&#x2109;
+      </td>
+      <td class="number">
+        <div class="pull-left text-muted">
+          <small>{{ reading.ext_temp|round(1) }}&#x2103;</small>
+        </div>
+        {{ reading.ext_temp_f()|round(1) }}&#x2109;
+      </td>
+      <td class="number">
+        {{ reading.humidity|round(1) }}%
+      </td>
+      <td class="number">
+        <div class="pull-left text-muted">
+          <small>{{ reading.resistance|numerify }} &#x2126;</small>
+        </div>
+        {% if reading.resistance > 0 %}
+        {{ reading.luminosity()|numerify(prec=2) }}
+        {% else %}
+        <span class="text-muted">N/A</span>
+        {% endif %}
+      </td>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}
+
+{% block javascripts %}
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+<script type="text/javascript" src="{{ url_for("static", filename="sensor.js") }}"></script>
+{% endblock %}

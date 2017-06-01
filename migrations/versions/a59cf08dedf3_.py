@@ -1,8 +1,8 @@
 """empty message
 
-Revision ID: 5419e1bbc726
+Revision ID: a59cf08dedf3
 Revises: 
-Create Date: 2017-05-31 15:50:55.628711
+Create Date: 2017-06-01 16:33:25.483741
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 from sqlalchemy.dialects import postgresql
 
 # revision identifiers, used by Alembic.
-revision = '5419e1bbc726'
+revision = 'a59cf08dedf3'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -51,10 +51,10 @@ def upgrade():
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('sensor_id', sa.Integer(), nullable=False),
     sa.Column('timestamp', sa.DateTime(), nullable=False),
-    sa.Column('int_temp', sa.Float(), nullable=False),
+    sa.Column('int_temp', sa.Float(), server_default='0.0', nullable=False),
     sa.Column('ext_temp', sa.Float(), nullable=False),
-    sa.Column('humidity', sa.Float(), nullable=False),
-    sa.Column('resistance', sa.Float(), nullable=False),
+    sa.Column('humidity', sa.Float(), server_default='0.0', nullable=False),
+    sa.Column('resistance', sa.Float(), server_default='0.0', nullable=False),
     sa.CheckConstraint('humidity >= 0 AND humidity <= 100', name='humidity_between_0_and_100'),
     sa.CheckConstraint('resistance >= 0', name='resistance_must_be_positive'),
     sa.ForeignKeyConstraint(['sensor_id'], ['sensors.id'], ),

@@ -89,6 +89,51 @@ class TestApiV1(TestCase):
         self.assertEqual(response.status_code, HTTPStatus.CREATED)
         self.assertEqual(sensor.readings.count(), 1)
 
+    def test_create_reading_with_missing_data(self):
+        sensor = create_sensor()
+        api_key = sensor.home.user.api_key
+        payload = dict()
+        with self.client:
+            response = self.client.post(
+                url_for('api_v1_create_reading', sensor_uuid=sensor.uuid),
+                headers={
+                    'Authorization': api_key,
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json',
+                },
+                data=json.dumps(payload),
+            )
+        self.assertEqual(response.status_code, HTTPStatus.UNPROCESSABLE_ENTITY)
+        self.assertDictEqual(
+            response.json,
+            {'error': "timestamp can't be blank"},
+        )
+
+    def test_create_reading_with_invalid_data(self):
+        sensor = create_sensor()
+        api_key = sensor.home.user.api_key
+        payload = dict(
+            timestamp=datetime.utcnow().isoformat(),
+            ext_temp=21.0,
+            humidity=-1.0,
+            resistance=-1.0,
+        )
+        with self.client:
+            response = self.client.post(
+                url_for('api_v1_create_reading', sensor_uuid=sensor.uuid),
+                headers={
+                    'Authorization': api_key,
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json',
+                },
+                data=json.dumps(payload),
+            )
+        self.assertEqual(response.status_code, HTTPStatus.UNPROCESSABLE_ENTITY)
+        self.assertDictEqual(
+            response.json,
+            {'error': "humidity must be between 0 and 100"},
+        )
+
     def test_create_duplicate_reading(self):
         sensor = create_sensor()
         api_key = sensor.home.user.api_key
@@ -111,6 +156,10 @@ class TestApiV1(TestCase):
                 data=json.dumps(payload),
             )
         self.assertEqual(response.status_code, HTTPStatus.CONFLICT)
+        self.assertDictEqual(
+            response.json,
+            {'error': 'A conflicting record already exists.'},
+        )
 
     def test_create_reading_without_authorization_header(self):
         sensor = create_sensor()

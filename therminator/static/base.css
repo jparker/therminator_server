@@ -12,6 +12,21 @@ h1 small, h2 small, h3 small {
   font-family: Oswald, "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
-.btn, .control-label, .navbar-brand {
+.btn, .control-label, .navbar-brand, .pager {
   font-family: Oswald, "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+table.table-detail th:first-child {
+  max-width: 20em;
+  min-width: 12em;
+  width: 20%;
+}
+
+th.min, td.min {
+  width: 1%;
+  white-space: nowrap;
+}
+
+th.number, td.number {
+  text-align: right;
 }

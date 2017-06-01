@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% block title %} {{ home.name }} {% endblock %}
+{% block content %}
+<h1>
+  Homes <small>{{ home.name }}</small>
+  <div class="pull-right">
+    <a href="{{ url_for("list_homes") }}" class="btn btn-default">
+      <span class="glyphicon glyphicon-level-up"></span>
+      Return to Home List
+    </a>
+  </div>
+</h1>
+
+<table class="table table-bordered table-detail">
+  <tr>
+    <th>Name</th>
+    <td>{{ home.name }}</td>
+  </tr>
+  <tr>
+    <th>Timezone</th>
+    <td>{{ home.timezone }}</td>
+  </tr>
+</table>
+
+<table class="table table-hover table-striped">
+  <thead>
+    <tr>
+      <th class="min"></th>
+      <th>Name</th>
+      <th>UUID</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for sensor in sensors %}
+    <tr>
+      <td class="min">
+        <a href="{{ url_for("show_sensor", sensor_id=sensor.id) }}" class="btn btn-default btn-xs">
+          <span class="glyphicon glyphicon-scale"></span>
+        </a>
+      </td>
+      <td>
+        <a href="{{ url_for("show_sensor", sensor_id=sensor.id) }}">
+          {{ sensor.name }}
+        </a>
+      </td>
+      <td>
+        {{ sensor.uuid }}
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}
