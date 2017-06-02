@@ -20,6 +20,9 @@ google.charts.setOnLoadCallback(function() {
       }
     }
 
+    var temp_range = readings[max_temp].ext_temp - readings[min_temp].ext_temp;
+    var humidity_range = readings[max_humidity].ext_humidity - readings[min_humidity].ext_humidity;
+
     var data = new google.visualization.DataTable();
 
     data.addColumn('datetime', 'Timestamp');
@@ -68,8 +71,14 @@ google.charts.setOnLoadCallback(function() {
       ],
       title: title,
       vAxes: [
-        { format: "#°F", textStyle: { color: '#f44336' } },
-        { format: "#'%", textStyle: { color: '#2196f3' } },
+        {
+          format: (temp_range < 2 ? "#.0°F" : "#°F"),
+          textStyle: { color: '#f44336' }
+        },
+        {
+          format: (humidity_range < 2 ? "#.#'%" : "#'%"),
+          textStyle: { color: '#2196f3' }
+        },
         {
           gridlines: { count: 0 },
           scaleType: 'log',
