@@ -1,16 +1,13 @@
 {% extends "base.html" %}
-{% block title %} {{ home.name }} {% endblock %}
-{% block content %}
-<h1>
-  Homes <small>{{ home.name }}</small>
-  <div class="pull-right">
-    <a href="{{ url_for("list_homes") }}" class="btn btn-default">
-      <span class="glyphicon glyphicon-level-up"></span>
-      Return to Home List
-    </a>
-  </div>
-</h1>
 
+{% block title %} {{ home.name }} {% endblock %}
+
+{% block breadcrumbs %}
+<li><a href="{{ url_for("list_homes") }}">Homes</a></li>
+<li class="active">{{ home.name }}</li>
+{% endblock %}
+
+{% block content %}
 <table class="table table-bordered table-detail">
   <tr>
     <th>Name</th>

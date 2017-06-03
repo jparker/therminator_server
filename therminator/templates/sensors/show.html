@@ -1,16 +1,15 @@
 {% extends "base.html" %}
-{% block title %} {{ sensor.name }} {% endblock %}
-{% block content %}
-<h1>
-  {{ date.strftime("%b %-d, %Y") }} <small>{{ sensor.name }}</small>
-  <div class="pull-right">
-    <a href="{{ url_for("show_home", home_id=home.id) }}" class="btn btn-default">
-      <span class="glyphicon glyphicon-level-up"></span>
-      Return to Home
-    </a>
-  </div>
-</h1>
 
+{% block title %} {{ sensor.name }} {% endblock %}
+
+{% block breadcrumbs %}
+<li><a href="{{ url_for("list_homes") }}">Homes</a></li>
+<li><a href="{{ url_for("show_home", home_id=home.id) }}">{{ home.name }}</a></li>
+<li><a href="{{ url_for("show_sensor", sensor_id=sensor.id) }}">{{ sensor.name }}</a></li>
+<li class="active">{{ date.strftime("%b %-d, %Y") }}</li>
+{% endblock %}
+
+{% block content %}
 <table class="table table-bordered table-detail">
   <tr>
     <th>Name</th>
@@ -34,7 +33,7 @@
 
 <div id="chart"
      data-date="{{ date.isoformat() }}"
-     data-source="{{ url_for('api_v1_list_readings', sensor_uuid=sensor.uuid, date=date) }}">
+     data-source="{{ url_for("api_v1_list_readings", sensor_uuid=sensor.uuid, date=date) }}">
 </div>
 
 <table class="table table-bordered table-hover table-striped">
