@@ -32,7 +32,7 @@
 {% include "sensors/pager.html" %}
 
 <div id="chart"
-     data-date="{{ date.isoformat() }}"
+     data-title="{{ sensor.name }}"
      data-source="{{ url_for("api_v1_list_readings", sensor_uuid=sensor.uuid, date=date) }}">
 </div>
 

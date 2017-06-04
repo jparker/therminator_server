@@ -54,9 +54,7 @@ google.charts.setOnLoadCallback(function() {
     }
 
     var chart = new google.visualization.LineChart(container);
-    var title = new google.visualization.DateFormat({
-      pattern: 'EEEE, MMMM d, yyyy',
-    }).formatValue(new Date(container.dataset.date));
+    var title = container.dataset.title;
     var options = {
       colors: ['#f44336', '#2196f3', '#fdd835'],
       curveType: 'function',
