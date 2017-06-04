@@ -28,4 +28,4 @@ login_manager.session_protection = 'strong'
 
 sslify = SSLify(app, permanent=True)
 
-import therminator.views
+import therminator.views, therminator.api.views
