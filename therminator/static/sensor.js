@@ -21,7 +21,7 @@ google.charts.setOnLoadCallback(function() {
     }
 
     var temp_range = readings[max_temp].ext_temp - readings[min_temp].ext_temp;
-    var humidity_range = readings[max_humidity].ext_humidity - readings[min_humidity].ext_humidity;
+    var humidity_range = readings[max_humidity].humidity - readings[min_humidity].humidity;
 
     var data = new google.visualization.DataTable();
 
