@@ -128,7 +128,7 @@ class Reading(db.Model):
 
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     sensor_id = db.Column(db.Integer, db.ForeignKey('sensors.id'), nullable=False)
-    timestamp = db.Column(db.DateTime, nullable=False)
+    timestamp = db.Column(db.DateTime, index=True, nullable=False)
     int_temp = db.Column(db.Float, nullable=False, server_default='0.0')
     ext_temp = db.Column(db.Float, nullable=False)
     humidity = db.Column(db.Float, nullable=False, server_default='0.0')
