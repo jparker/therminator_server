@@ -27,6 +27,14 @@
       </a>
     </td>
   </tr>
+  <tr>
+    <th>Latest Reading</th>
+    <td>
+      {{ latest_reading.ext_temp_f()|round(1) }}&#x2109;
+      at
+      {{ latest_reading.timestamp|localtime(timezone=home.timezone) }}
+    </td>
+  </tr>
 </table>
 
 {% include "sensors/pager.html" %}
@@ -50,7 +58,7 @@
     {% for reading in readings %}
     <tr>
       <td>
-        {{ reading.timestamp|localtime(timezone=home.timezone) }}
+        {{ reading.timestamp|localtime(timezone=home.timezone, fmt='%H:%M %Z') }}
       </td>
       <td class="number">
         <div class="pull-left text-muted">

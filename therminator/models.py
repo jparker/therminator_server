@@ -108,6 +108,10 @@ class Sensor(db.Model):
     def __repr__(self):
         return '<Sensor id={} name={}>'.format(self.id, self.name)
 
+    def latest_reading(self):
+        unordered_readings = self.readings.order_by(None)
+        return unordered_readings.order_by(Reading.timestamp.desc()).first()
+
 
 class Reading(db.Model):
     __tablename__ = 'readings'

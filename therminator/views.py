@@ -20,10 +20,10 @@ def expose_timedelta():
     return dict(timedelta=_timedelta)
 
 @app.template_filter('localtime')
-def localtime(timestamp, timezone):
+def localtime(timestamp, timezone, fmt='%Y-%m-%d %H:%M %Z'):
     tz = pytz.timezone(timezone)
     local = pytz.utc.localize(timestamp, is_dst=None).astimezone(tz)
-    return local.strftime('%H:%M %Z')
+    return local.strftime(fmt)
 
 @app.template_filter('numerify')
 def numerify(number, prec=1):
@@ -83,6 +83,7 @@ def show_sensor(sensor_id, date):
         sensor=sensor,
         home=sensor.home,
         readings=readings,
+        latest_reading=sensor.latest_reading(),
         date=date,
     )
 
