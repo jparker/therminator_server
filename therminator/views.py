@@ -37,7 +37,7 @@ def sign_in():
         user = User.query.filter_by(email=form.email.data).first()
         if user and user.is_correct_password(form.password.data):
             app.logger.info('User {!r} signed in'.format(user.email))
-            login_user(user)
+            login_user(user, remember=form.remember.data)
             flash('You have successfully signed in.', 'success')
             return redirect_back('list_homes')
         else:
