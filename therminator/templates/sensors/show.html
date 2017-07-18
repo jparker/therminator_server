@@ -1,38 +1,75 @@
 {% extends "base.html" %}
 
-{% block title %} {{ sensor.name }} {% endblock %}
+{% block title %} {{ current_sensor.name }} {% endblock %}
 
 {% block breadcrumbs %}
-<li><a href="{{ url_for("list_homes") }}">Homes</a></li>
-<li><a href="{{ url_for("show_home", home_id=home.id) }}">{{ home.name }}</a></li>
-<li><a href="{{ url_for("show_sensor", sensor_id=sensor.id) }}">{{ sensor.name }}</a></li>
-<li class="active">{{ date.strftime("%b %-d, %Y") }}</li>
+<li>
+  <a href="{{ url_for("list_homes") }}">Homes</a>
+</li>
+<li>
+  <a href="{{ url_for("show_home", home_id=current_sensor.home.id) }}">
+    {{ current_sensor.home.name }}
+  </a>
+</li>
+<li>
+  <a href="{{ url_for("show_sensor", sensor_id=current_sensor.id) }}">
+    {{ current_sensor.name }}
+  </a>
+</li>
+<li class="active">
+  {{ date.strftime("%b %-d, %Y") }}
+</li>
 {% endblock %}
 
 {% block content %}
+<nav id="tabs">
+  <ul class="nav nav-tabs">
+    <li role="presentation">
+      <a href="{{ url_for("show_home", home_id=home.id) }}">{{ home.name }}</a>
+    </li>
+    {% for sensor in home.sensors %}
+      {% if sensor == current_sensor %}
+        <li role="presentation" class="active">
+          <a href="{{ url_for("show_sensor", sensor_id=sensor.id) }}">
+            {{ sensor.name }}
+          </a>
+        </li>
+      {% else %}
+        <li role="presentation">
+          <a href="{{ url_for("show_sensor", sensor_id=sensor.id) }}">
+            {{ sensor.name }}
+          </a>
+        </li>
+      {% endif %}
+    {% endfor %}
+  </ul>
+</nav>
+
 <table class="table table-bordered table-detail">
   <tr>
     <th>Name</th>
-    <td>{{ sensor.name }}</td>
+    <td>{{ current_sensor.name }}</td>
   </tr>
   <tr>
     <th>UUID</th>
-    <td>{{ sensor.uuid }}</td>
+    <td><tt>{{ current_sensor.uuid }}</tt></td>
   </tr>
   <tr>
     <th>API Endpoint</th>
     <td>
-      <a href="{{ url_for("api_v1_create_reading", sensor_uuid=sensor.uuid) }}">
-        {{ url_for("api_v1_create_reading", sensor_uuid=sensor.uuid, _external=True) }}
+      <a href="{{ url_for("api_v1_create_reading", sensor_uuid=current_sensor.uuid) }}">
+        <tt>
+          {{ url_for("api_v1_create_reading", sensor_uuid=current_sensor.uuid, _external=True) }}
+        </tt>
       </a>
     </td>
   </tr>
   <tr>
     <th>Latest Reading</th>
     <td>
-      {{ latest_reading.ext_temp_f()|round(1) }}&#x2109;
+      {{ current_sensor.latest_reading.ext_temp_f()|round(1) }}&#x2109;
       at
-      {{ latest_reading.timestamp|localtime(timezone=home.timezone) }}
+      {{ current_sensor.latest_reading.timestamp|localtime(timezone=home.timezone) }}
     </td>
   </tr>
 </table>
@@ -40,8 +77,8 @@
 {% include "sensors/pager.html" %}
 
 <div id="chart"
-     data-title="{{ sensor.name }}"
-     data-source="{{ url_for("api_v1_list_readings", sensor_uuid=sensor.uuid, date=date) }}">
+     data-title="{{ current_sensor.name }}"
+     data-source="{{ url_for("api_v1_list_readings", sensor_uuid=current_sensor.uuid, date=date) }}">
 </div>
 
 <table class="table table-bordered table-hover table-striped">

@@ -100,6 +100,11 @@ class Sensor(db.Model):
         lazy='dynamic',
         order_by='Reading.timestamp',
     )
+    latest_reading = db.relationship(
+        'Reading',
+        order_by='Reading.timestamp.desc()',
+        uselist=False,
+    )
 
     def __init__(self, home, name):
         self.home = home
@@ -107,10 +112,6 @@ class Sensor(db.Model):
 
     def __repr__(self):
         return '<Sensor id={} name={}>'.format(self.id, self.name)
-
-    def latest_reading(self):
-        unordered_readings = self.readings.order_by(None)
-        return unordered_readings.order_by(Reading.timestamp.desc()).first()
 
 
 class Reading(db.Model):
@@ -134,7 +135,7 @@ class Reading(db.Model):
     sensor_id = db.Column(db.Integer, db.ForeignKey('sensors.id'), nullable=False)
     timestamp = db.Column(db.DateTime, index=True, nullable=False)
     int_temp = db.Column(db.Float, nullable=False, server_default='0.0')
-    ext_temp = db.Column(db.Float, nullable=False)
+    ext_temp = db.Column(db.Float, nullable=False, index=True)
     humidity = db.Column(db.Float, nullable=False, server_default='0.0')
     resistance = db.Column(db.Float, nullable=False, server_default='0.0')
 

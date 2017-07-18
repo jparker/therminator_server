@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css?family=Oswald|Roboto:400,700');
+@import url('https://fonts.googleapis.com/css?family=Roboto:400,700|Roboto+Condensed');
 
 body {
   font-family: Roboto, "Helvetica Neue", Helvetica, Arial, sans-serif;
@@ -9,11 +9,19 @@ h1, h2, h3 {
 }
 
 h1 small, h2 small, h3 small {
-  font-family: Oswald, "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-family: "Roboto Condensed", "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
-.btn, .control-label, .navbar-brand, .pager {
-  font-family: Oswald, "Helvetica Neue", Helvetica, Arial, sans-serif;
+.breadcrumb, .btn, .control-label, .nav, .pager {
+  font-family: "Roboto Condensed", "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+.navbar-brand {
+  font-weight: bold;
+}
+
+nav#tabs {
+  margin-bottom: 1em;
 }
 
 table.table-detail th:first-child {

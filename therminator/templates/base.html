@@ -20,7 +20,7 @@
   <body>
 
     <nav class="navbar navbar-default">
-      <div class="container-fluid">
+      <div class="container">
         <div class="navbar-header">
           <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="navbar-collapse" aria-expanded="false">
             <span class="sr-only">Toggle navigation</span>
@@ -32,38 +32,6 @@
         </div>
         <div class="collapse navbar-collapse" id="navbar-collapse">
           {% if current_user.is_authenticated %}
-            <ul class="nav navbar-nav">
-              <li>
-                <a href="{{ url_for('list_homes') }}">
-                  Homes
-                </a>
-              </li>
-              {% for h in current_user.homes %}
-              <li>
-                <a href="{{ url_for('show_home', home_id=h.id) }}">
-                  {{ h.name }}
-                </a>
-              </li>
-              {% endfor %}
-              {% if home %}
-              <li class="dropdown">
-                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
-                  Sensors
-                  <span class="caret"></span>
-                </a>
-                <ul class="dropdown-menu">
-                  {% for s in home.sensors %}
-                  <li>
-                    <a href="{{ url_for('show_sensor', sensor_id=s.id) }}">
-                      <span class="glyphicon glyphicon-scale"></span>
-                      {{ s.name }}
-                    </a>
-                  </li>
-                  {% endfor %}
-                </ul>
-              </li>
-              {% endif %}
-            </ul>
             <ul class="nav navbar-nav navbar-right">
               <li>
                 <a href="#" data-toggle="dropdown">

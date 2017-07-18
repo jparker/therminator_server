@@ -61,7 +61,7 @@ def list_homes():
 @login_required
 def show_home(home_id):
     home = current_user.homes.filter_by(id=home_id).first_or_404()
-    return render_template('homes/show.html', home=home, sensors=home.sensors)
+    return render_template('homes/show.html', home=home)
 
 @app.route('/sensors/<int:sensor_id>', defaults={'date': None})
 @app.route('/sensors/<int:sensor_id>/<date:date>')
@@ -80,10 +80,9 @@ def show_sensor(sensor_id, date):
     )).order_by(Reading.timestamp)
     return render_template(
         'sensors/show.html',
-        sensor=sensor,
+        current_sensor=sensor,
         home=sensor.home,
         readings=readings,
-        latest_reading=sensor.latest_reading(),
         date=date,
     )
 

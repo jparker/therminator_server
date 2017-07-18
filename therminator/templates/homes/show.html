@@ -8,6 +8,21 @@
 {% endblock %}
 
 {% block content %}
+<nav id="tabs">
+  <ul class="nav nav-tabs">
+    <li role="presentation" class="active">
+      <a href="{{ url_for("show_home", home_id=home.id) }}">{{ home.name }}</a>
+    </li>
+    {% for sensor in home.sensors %}
+      <li role="presentation">
+        <a href="{{ url_for("show_sensor", sensor_id=sensor.id) }}">
+          {{ sensor.name }}
+        </a>
+      </li>
+    {% endfor %}
+  </ul>
+</nav>
+
 <table class="table table-bordered table-detail">
   <tr>
     <th>Name</th>
@@ -20,18 +35,21 @@
 </table>
 
 <table class="table table-hover table-striped">
+  <caption>Latest readings</caption>
   <thead>
     <tr>
       <th class="min"></th>
-      <th>Name</th>
-      <th>UUID</th>
+      <th>Sensor</th>
+      <th>Timestamp</th>
+      <th class="number">Temperature</th>
+      <th class="number">Humidity</th>
     </tr>
   </thead>
   <tbody>
-    {% for sensor in sensors %}
+    {% for sensor in home.sensors %}
     <tr>
       <td class="min">
-        <a href="{{ url_for("show_sensor", sensor_id=sensor.id) }}" class="btn btn-default btn-xs">
+        <a href="{{ url_for("show_sensor", sensor_id=sensor.id) }}" class="btn btn-xs btn-default">
           <span class="glyphicon glyphicon-scale"></span>
         </a>
       </td>
@@ -41,7 +59,13 @@
         </a>
       </td>
       <td>
-        {{ sensor.uuid }}
+        {{ sensor.latest_reading.timestamp|localtime(timezone=home.timezone) }}
+      </td>
+      <td class="number">
+        {{ sensor.latest_reading.ext_temp_f()|round(1) }}&#x2109;
+      </td>
+      <td class="number">
+        {{ sensor.latest_reading.humidity|round(1) }}%
       </td>
     </tr>
     {% endfor %}
