@@ -58,17 +58,27 @@
           {{ sensor.name }}
         </a>
       </td>
+      {% if sensor.latest_reading() %}
       <td>
-        {{ sensor.latest_reading.timestamp|localtime(timezone=home.timezone) }}
+        {{ sensor.latest_reading().timestamp|localtime(timezone=home.timezone) }}
       </td>
       <td class="number">
-        {{ sensor.latest_reading.ext_temp_f()|round(1) }}&#x2109;
+        {{ sensor.latest_reading().ext_temp_f()|round(1) }}&#x2109;
       </td>
       <td class="number">
-        {{ sensor.latest_reading.humidity|round(1) }}%
+        {{ sensor.latest_reading().humidity|round(1) }}%
       </td>
+      {% else %}
+      <td>N/A</td>
+      <td class="number">N/A</td>
+      <td class="number">N/A</td>
+      {% endif %}
     </tr>
     {% endfor %}
   </tbody>
 </table>
+
+<a href="{{ url_for("new_sensor", home_id=home.id) }}" class="btn btn-lg btn-primary">
+  New Sensor
+</a>
 {% endblock %}

@@ -32,7 +32,7 @@ class TestSensor(TestCase):
         ]
         db.session.add_all(readings)
         db.session.commit()
-        self.assertEqual(sensor.latest_reading, readings[0])
+        self.assertEqual(sensor.latest_reading(), readings[0])
 
 if __name__ == '__main__':
     unittest.main()

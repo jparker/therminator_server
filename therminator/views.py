@@ -6,7 +6,7 @@ from sqlalchemy.exc import IntegrityError
 from urllib.parse import urljoin, urlparse
 
 from . import app, db, login_manager
-from .forms import SignInForm
+from .forms import SignInForm, SensorForm
 from .models import User, Home, Sensor, Reading
 
 @login_manager.user_loader
@@ -85,6 +85,28 @@ def show_sensor(sensor_id, date):
         readings=readings,
         date=date,
     )
+
+@app.route('/homes/<int:home_id>/sensors/new')
+@login_required
+def new_sensor(home_id):
+    home = current_user.homes.filter_by(id=home_id).first_or_404()
+    form = SensorForm()
+    return render_template('sensors/new.html', form=form, home=home)
+
+@app.route('/homes/<int:home_id>/sensors', methods=['POST'])
+@login_required
+def create_sensor(home_id):
+    home = current_user.homes.filter_by(id=home_id).first_or_404()
+    form = SensorForm()
+    if form.validate_on_submit():
+        sensor = Sensor(home=home, name=form.name.data)
+        db.session.add(sensor)
+        db.session.commit()
+        flash('Sensor {} created successfully.'.format(sensor.name), 'success')
+        return redirect(url_for('show_sensor', sensor_id=sensor.id))
+    flash('Sensor could not be created.', 'danger')
+    return render_template('sensors/new.html', form=form, home=home)
+
 
 def get_redirect_target():
     for target in request.values.get('next'), request.referrer:

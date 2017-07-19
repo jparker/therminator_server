@@ -1,5 +1,4 @@
 {% extends "base.html" %}
-
 {% block title %} {{ current_sensor.name }} {% endblock %}
 
 {% block breadcrumbs %}
@@ -28,19 +27,19 @@
       <a href="{{ url_for("show_home", home_id=home.id) }}">{{ home.name }}</a>
     </li>
     {% for sensor in home.sensors %}
-      {% if sensor == current_sensor %}
-        <li role="presentation" class="active">
-          <a href="{{ url_for("show_sensor", sensor_id=sensor.id) }}">
-            {{ sensor.name }}
-          </a>
-        </li>
-      {% else %}
-        <li role="presentation">
-          <a href="{{ url_for("show_sensor", sensor_id=sensor.id) }}">
-            {{ sensor.name }}
-          </a>
-        </li>
-      {% endif %}
+    {% if sensor == current_sensor %}
+    <li role="presentation" class="active">
+      <a href="{{ url_for("show_sensor", sensor_id=sensor.id) }}">
+        {{ sensor.name }}
+      </a>
+    </li>
+    {% else %}
+    <li role="presentation">
+      <a href="{{ url_for("show_sensor", sensor_id=sensor.id) }}">
+        {{ sensor.name }}
+      </a>
+    </li>
+    {% endif %}
     {% endfor %}
   </ul>
 </nav>
@@ -67,9 +66,13 @@
   <tr>
     <th>Latest Reading</th>
     <td>
-      {{ current_sensor.latest_reading.ext_temp_f()|round(1) }}&#x2109;
+      {% if current_sensor.latest_reading() %}
+      {{ current_sensor.latest_reading().ext_temp_f()|round(1) }}&#x2109;
       at
-      {{ current_sensor.latest_reading.timestamp|localtime(timezone=home.timezone) }}
+      {{ current_sensor.latest_reading().timestamp|localtime(timezone=home.timezone) }}
+      {% else %}
+      N/A
+      {% endif %}
     </td>
   </tr>
 </table>

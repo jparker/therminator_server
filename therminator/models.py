@@ -100,11 +100,8 @@ class Sensor(db.Model):
         lazy='dynamic',
         order_by='Reading.timestamp',
     )
-    latest_reading = db.relationship(
-        'Reading',
-        order_by='Reading.timestamp.desc()',
-        uselist=False,
-    )
+
+    _latest_reading = None
 
     def __init__(self, home, name):
         self.home = home
@@ -112,6 +109,12 @@ class Sensor(db.Model):
 
     def __repr__(self):
         return '<Sensor id={} name={}>'.format(self.id, self.name)
+
+    def latest_reading(self):
+        if not self._latest_reading:
+            unordered = self.readings.order_by(None)
+            self._latest_reading = unordered.order_by(Reading.timestamp.desc()).first()
+        return self._latest_reading
 
 
 class Reading(db.Model):
