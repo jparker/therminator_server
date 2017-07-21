@@ -34,49 +34,36 @@
   </tr>
 </table>
 
-<table class="table table-hover table-striped">
-  <caption>Latest readings</caption>
-  <thead>
-    <tr>
-      <th class="min"></th>
-      <th>Sensor</th>
-      <th>Timestamp</th>
-      <th class="number">Temperature</th>
-      <th class="number">Humidity</th>
-    </tr>
-  </thead>
-  <tbody>
-    {% for sensor in home.sensors %}
-    <tr>
-      <td class="min">
-        <a href="{{ url_for("show_sensor", sensor_id=sensor.id) }}" class="btn btn-xs btn-default">
-          <span class="glyphicon glyphicon-scale"></span>
-        </a>
-      </td>
-      <td>
-        <a href="{{ url_for("show_sensor", sensor_id=sensor.id) }}">
-          {{ sensor.name }}
-        </a>
-      </td>
+<div class="row">
+  {% for sensor in home.sensors %}
+  <div class="col-sm-4">
+    <div class="jumbotron">
       {% if sensor.latest_reading() %}
-      <td>
-        {{ sensor.latest_reading().timestamp|localtime(timezone=home.timezone) }}
-      </td>
-      <td class="number">
-        {{ sensor.latest_reading().ext_temp_f()|round(1) }}&#x2109;
-      </td>
-      <td class="number">
-        {{ sensor.latest_reading().humidity|round(1) }}%
-      </td>
+      <h1>
+        {{ sensor.latest_reading().ext_temp_f()|round|int }}&#x2109;
+        <small>{{ sensor.latest_reading().humidity|round|int }}%</small>
+      </h1>
+      <p>
+      <small>
+        Last reading taken at
+        {{ sensor.latest_reading().timestamp|localtime(fmt='%H:%M', timezone=home.timezone) }}
+      </small>
+      </p>
       {% else %}
-      <td>N/A</td>
-      <td class="number">N/A</td>
-      <td class="number">N/A</td>
+      <h1>
+      <span class="glyphicon glyphicon-question-sign"></span>
+      </h1>
       {% endif %}
-    </tr>
-    {% endfor %}
-  </tbody>
-</table>
+      <p>
+      <a href="{{ url_for("show_sensor", sensor_id=sensor.id) }}">
+        {{ sensor.name }}
+        <span class="glyphicon glyphicon-arrow-right"></span>
+      </a>
+      </p>
+    </div>
+  </div>
+  {% endfor %}
+</div>
 
 <a href="{{ url_for("new_sensor", home_id=home.id) }}" class="btn btn-lg btn-primary">
   New Sensor

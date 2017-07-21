@@ -29,13 +29,13 @@
     {% for sensor in home.sensors %}
     {% if sensor == current_sensor %}
     <li role="presentation" class="active">
-      <a href="{{ url_for("show_sensor", sensor_id=sensor.id) }}">
+      <a href="{{ url_for("show_sensor", sensor_id=sensor.id, date=date) }}">
         {{ sensor.name }}
       </a>
     </li>
     {% else %}
     <li role="presentation">
-      <a href="{{ url_for("show_sensor", sensor_id=sensor.id) }}">
+      <a href="{{ url_for("show_sensor", sensor_id=sensor.id, date=date) }}">
         {{ sensor.name }}
       </a>
     </li>
