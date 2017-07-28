@@ -47,7 +47,14 @@
 <table class="table table-bordered table-detail">
   <tr>
     <th>Name</th>
-    <td>{{ current_sensor.name }}</td>
+    <td>
+      {{ current_sensor.name }}
+      <div class="pull-right">
+        <a href="{{ url_for("edit_sensor", sensor_id=current_sensor.id) }}" class="btn btn-xs btn-default">
+          Edit Sensor
+        </a>
+      </div>
+    </td>
   </tr>
   <tr>
     <th>UUID</th>

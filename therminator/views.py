@@ -107,6 +107,40 @@ def create_sensor(home_id):
     flash('Sensor could not be created.', 'danger')
     return render_template('sensors/new.html', form=form, home=home)
 
+@app.route('/sensors/<int:sensor_id>/edit')
+@login_required
+def edit_sensor(sensor_id):
+    sensor = db.session.query(Sensor).filter_by(id=sensor_id) \
+        .join(Home).filter_by(user_id=current_user.id).first_or_404()
+    form = SensorForm()
+    form.process(obj=sensor)
+    return render_template(
+        'sensors/edit.html',
+        form=form,
+        current_sensor=sensor,
+        home=sensor.home,
+    )
+
+@app.route('/sensors/<int:sensor_id>', methods=['POST', 'PATCH'])
+@login_required
+def update_sensor(sensor_id):
+    sensor = db.session.query(Sensor).filter_by(id=sensor_id) \
+        .join(Home).filter_by(user_id=current_user.id).first_or_404()
+    form = SensorForm()
+    if form.validate_on_submit():
+        sensor.name = form.name.data
+        db.session.add(sensor)
+        db.session.commit()
+        flash('Sensor {} updated successfully.'.format(sensor.name), 'success')
+        return redirect(url_for('show_sensor', sensor_id=sensor.id))
+    flash('Sensor could not be updated.', 'danger')
+    return render_template(
+        'sensors/edit.html',
+        form=form,
+        current_sensor=sensor,
+        home=sensor.home,
+    )
+
 
 def get_redirect_target():
     for target in request.values.get('next'), request.referrer:

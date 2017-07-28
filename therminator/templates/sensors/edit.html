@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+{% block title %} Edit Sensor {% endblock %}
+
+{% block breadcrumbs %}
+<li>
+  <a href="{{ url_for("list_homes") }}">Homes</a>
+</li>
+<li>
+  <a href="{{ url_for("show_home", home_id=current_sensor.home.id) }}">
+    {{ current_sensor.home.name }}
+  </a>
+</li>
+<li>
+  <a href="{{ url_for("show_sensor", sensor_id=current_sensor.id) }}">
+    {{ current_sensor.name }}
+  </a>
+</li>
+<li class="active">
+  Edit Sensor
+</li>
+{% endblock %}
+
+{% block content %}
+<nav id="tabs">
+  <ul class="nav nav-tabs">
+    <li role="presentation">
+      <a href="{{ url_for("show_home", home_id=home.id) }}">{{ home.name }}</a>
+    </li>
+    {% for sensor in home.sensors %}
+    {% if sensor == current_sensor %}
+    <li role="presentation" class="active">
+      <a href="{{ url_for("show_sensor", sensor_id=sensor.id) }}">
+        {{ sensor.name }}
+      </a>
+    </li>
+    {% else %}
+    <li role="presentation">
+      <a href="{{ url_for("show_sensor", sensor_id=sensor.id) }}">
+        {{ sensor.name }}
+      </a>
+    </li>
+    {% endif %}
+    {% endfor %}
+  </ul>
+</nav>
+
+<div class="row">
+  <div class="col-sm-6 col-md-4">
+    <form method="post" action="{{ url_for("update_sensor", sensor_id=current_sensor.id) }}">
+      {{ form.csrf_token }}
+      <div class="form-group form-group-lg">
+        {{ form.name.label(class="control-label") }}
+        {{ form.name(class="form-control", autofocus=True) }}
+      </div>
+      <button type="submit" class="btn btn-lg btn-primary">
+        Update Sensor
+      </button>
+    </form>
+  </div>
+</div>
+{% endblock %}

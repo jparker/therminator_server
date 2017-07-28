@@ -28,7 +28,6 @@ def load_user_from_request(request):
 @app.route('/api/v1/<uuid:sensor_uuid>/readings/<date:date>')
 @login_required
 def api_v1_list_readings(sensor_uuid, date):
-    app.logger.info('List readings for sensor {} on {}'.format(sensor_uuid, date))
     sensor = db.session.query(Sensor).filter_by(uuid=sensor_uuid) \
         .join(Home).filter_by(user_id=current_user.id).first_or_404()
     timezone = pytz.timezone(sensor.home.timezone)
