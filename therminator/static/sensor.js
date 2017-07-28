@@ -34,43 +34,48 @@ google.charts.setOnLoadCallback(function() {
     data.addColumn({type: 'string', role: 'annotation'});
     data.addColumn('number', 'Luminosity');
     data.addColumn({type: 'string', role: 'tooltip'});
+    data.addColumn('number', 'Internal Temperature');
+    data.addColumn({type: 'string', role: 'tooltip'});
 
     for (var i=0; i<readings.length; i++) {
       var timestamp = new Date(readings[i].timestamp);
-      var temp_f = readings[i].ext_temp * 9/5 + 32;
+      var ext_temp_f = readings[i].ext_temp * 9/5 + 32;
+      var int_temp_f = readings[i].int_temp * 9/5 + 32;
       var humidity = readings[i].humidity;
       var luminosity = Math.pow(10, 6) / readings[i].resistance;
       data.addRow([
         timestamp,
-        temp_f,
-        temp_f.toFixed(1) + '°F',
-        (i==min_temp || i==max_temp) ? temp_f.toFixed(1) + '°F' : null,
+        ext_temp_f,
+        ext_temp_f.toFixed(1) + '℉',
+        (i==min_temp || i==max_temp) ? ext_temp_f.toFixed(1) + '℉' : null,
         humidity,
         humidity.toFixed(1) + '%',
         (i==min_humidity || i==max_humidity) ? humidity.toFixed(1) + '%' : null,
         luminosity,
         luminosity.toFixed(2),
+        int_temp_f,
+        int_temp_f.toFixed(1) + '℉'
       ]);
     }
 
     var chart = new google.visualization.LineChart(container);
     var title = container.dataset.title;
     var options = {
-      colors: ['#f44336', '#2196f3', '#fdd835'],
-      curveType: 'function',
+      colors: ['#f44336', '#2196f3', '#fdd835', '#ff9800'],
       focusTarget: 'category',
       hAxis: { format: 'HH:mm', title: '' },
       height: 300,
       legend: { position: 'bottom' },
       series: [
-        { targetAxisIndex: 0 },
+        { targetAxisIndex: 0, curveType: 'function' },
         { targetAxisIndex: 1 },
-        { targetAxisIndex: 2 },
+        { targetAxisIndex: 2, curveType: 'function' },
+        { targetAxisIndex: 3, lineDashStyle: [1, 2] },
       ],
       title: title,
       vAxes: [
         {
-          format: (temp_range < 2 ? "#.0°F" : "#°F"),
+          format: (temp_range < 2 ? "#.0℉" : "#℉"),
           textStyle: { color: '#f44336' }
         },
         {
@@ -82,6 +87,10 @@ google.charts.setOnLoadCallback(function() {
           scaleType: 'log',
           textPosition: 'none',
           viewWindowMode: 'maximized',
+        },
+        {
+          gridlines: { count: 0 },
+          textPosition: 'none',
         },
       ],
     };
