@@ -19,6 +19,12 @@ def expose_timedelta():
         return timedelta(**kwargs)
     return dict(timedelta=_timedelta)
 
+@app.context_processor
+def expose_utcnow():
+    def utcnow():
+        return datetime.utcnow()
+    return dict(utcnow=utcnow)
+
 @app.template_filter('localtime')
 def localtime(timestamp, timezone, fmt='%Y-%m-%d %H:%M %Z'):
     tz = pytz.timezone(timezone)

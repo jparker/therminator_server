@@ -34,19 +34,28 @@
       </h1>
       <p>
       <small>
+        {% if sensor.latest_reading().timestamp < utcnow() - timedelta(hours=1) %}
+        <span class="label label-danger">OFFLINE</span>
+        {% else %}
         Last reading taken at
         {{ sensor.latest_reading().timestamp|localtime(fmt='%H:%M', timezone=home.timezone) }}
+        {% endif %}
       </small>
       </p>
       {% else %}
       <h1>
-      <span class="glyphicon glyphicon-question-sign"></span>
+        &ndash;&#x2109;
+        <small>&ndash;%</small>
       </h1>
+      <p>
+      <small>
+        <span class="label label-warning">NO DATA</span>
+      </small>
+      </p>
       {% endif %}
       <p>
       <a href="{{ url_for("show_sensor", sensor_id=sensor.id) }}">
-        {{ sensor.name }}
-        <span class="glyphicon glyphicon-arrow-right"></span>
+        {{ sensor.name }} &raquo;
       </a>
       </p>
     </div>

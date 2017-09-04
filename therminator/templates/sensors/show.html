@@ -74,11 +74,17 @@
     <th>Latest Reading</th>
     <td>
       {% if current_sensor.latest_reading() %}
-      {{ current_sensor.latest_reading().ext_temp_f()|round(1) }}&#x2109;
-      at
-      {{ current_sensor.latest_reading().timestamp|localtime(timezone=home.timezone) }}
+        {% if current_sensor.latest_reading().timestamp < utcnow() - timedelta(hours=1) %}
+          <span class="label label-danger">OFFLINE</span>
+        {% endif %}
+        {{ current_sensor.latest_reading().ext_temp_f()|round(1) }}&#x2109;
+        /
+        {{ current_sensor.latest_reading().humidity|round(1) }}%
+        <div class="text-muted">
+          {{ current_sensor.latest_reading().timestamp|localtime(timezone=home.timezone) }}
+        </div>
       {% else %}
-      N/A
+        <span class="label label-warning">NO DATA</span>
       {% endif %}
     </td>
   </tr>
