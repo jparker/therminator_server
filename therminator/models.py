@@ -213,5 +213,5 @@ class Reading(db.Model):
     @validates_presence
     def validate_resistance(self, key, value):
         if value < 0:
-            raise ValueError('resistance must be greater than or equal to 0')
+            return 0.0
         return value

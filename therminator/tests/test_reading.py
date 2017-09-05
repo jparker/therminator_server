@@ -52,12 +52,8 @@ class TestReading(TestCase):
         )
 
     def test_validate_resistance(self):
-        with self.assertRaises(ValueError) as cm:
-            build_reading(resistance=-1.0)
-        self.assertEqual(
-            cm.exception.args,
-            ('resistance must be greater than or equal to 0',)
-        )
+        reading = build_reading(resistance=-1.0)
+        self.assertEqual(0.0, reading.resistance)
 
 if __name__ == '__main__':
     unittest.main()
