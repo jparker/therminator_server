@@ -135,7 +135,7 @@
         {% if reading.resistance > 0 %}
         {{ reading.luminosity()|numerify(prec=2) }}
         {% else %}
-        <span class="text-muted">N/A</span>
+        <span class="text-muted">&infin;</span>
         {% endif %}
       </td>
     {% endfor %}
