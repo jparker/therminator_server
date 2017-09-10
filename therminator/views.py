@@ -1,6 +1,12 @@
 from datetime import datetime, time, timedelta
 from flask import flash, redirect, render_template, request, url_for
-from flask_login import current_user, login_required, login_user, logout_user
+from flask_login import (
+    current_user,
+    fresh_login_required,
+    login_required,
+    login_user,
+    logout_user,
+)
 import pytz
 from sqlalchemy.exc import IntegrityError
 from urllib.parse import urljoin, urlparse
@@ -93,14 +99,14 @@ def show_sensor(sensor_id, date):
     )
 
 @app.route('/homes/<int:home_id>/sensors/new')
-@login_required
+@fresh_login_required
 def new_sensor(home_id):
     home = current_user.homes.filter_by(id=home_id).first_or_404()
     form = SensorForm()
     return render_template('sensors/new.html', form=form, home=home)
 
 @app.route('/homes/<int:home_id>/sensors', methods=['POST'])
-@login_required
+@fresh_login_required
 def create_sensor(home_id):
     home = current_user.homes.filter_by(id=home_id).first_or_404()
     form = SensorForm()
@@ -114,7 +120,7 @@ def create_sensor(home_id):
     return render_template('sensors/new.html', form=form, home=home)
 
 @app.route('/sensors/<int:sensor_id>/edit')
-@login_required
+@fresh_login_required
 def edit_sensor(sensor_id):
     sensor = db.session.query(Sensor).filter_by(id=sensor_id) \
         .join(Home).filter_by(user_id=current_user.id).first_or_404()
@@ -128,7 +134,7 @@ def edit_sensor(sensor_id):
     )
 
 @app.route('/sensors/<int:sensor_id>', methods=['POST', 'PATCH'])
-@login_required
+@fresh_login_required
 def update_sensor(sensor_id):
     sensor = db.session.query(Sensor).filter_by(id=sensor_id) \
         .join(Home).filter_by(user_id=current_user.id).first_or_404()
