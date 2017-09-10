@@ -1,6 +1,7 @@
 from datetime import datetime, time, timedelta
 from flask import flash, redirect, render_template, request, url_for
 from flask_login import (
+    confirm_login,
     current_user,
     fresh_login_required,
     login_required,
@@ -12,7 +13,7 @@ from sqlalchemy.exc import IntegrityError
 from urllib.parse import urljoin, urlparse
 
 from . import app, db, login_manager
-from .forms import SignInForm, SensorForm
+from .forms import SignInForm, RefreshSessionForm, SensorForm
 from .models import User, Home, Sensor, Reading
 
 @login_manager.user_loader
@@ -63,6 +64,19 @@ def sign_out():
     logout_user()
     flash('You have successfully signed out.', 'info')
     return redirect(url_for('list_homes'))
+
+@app.route('/refresh-session', methods=['GET', 'POST'])
+def refresh_session():
+    form = RefreshSessionForm()
+    target = get_redirect_target()
+    if form.validate_on_submit():
+        if current_user.is_correct_password(form.password.data):
+            confirm_login()
+            flash('You have successfully reauthenticated.', 'success')
+            return redirect_back('list_homes')
+        else:
+            flash('Invalid password.', 'danger')
+    return render_template('refresh_session.html', form=form, target=target)
 
 @app.route('/')
 @login_required

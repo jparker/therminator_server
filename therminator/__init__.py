@@ -24,8 +24,9 @@ login_manager.init_app(app)
 login_manager.login_view = 'sign_in'
 login_manager.login_message = u'You must sign in before proceeding.'
 login_manager.login_message_category = 'info'
-login_manager.refresh_view = 'sign_in'
+login_manager.refresh_view = 'refresh_session'
 login_manager.needs_refresh_message = u'You must reauthenticate again before proceeding.'
+login_manager.needs_refresh_message_category = 'info'
 login_manager.session_protection = 'basic'
 
 sslify = SSLify(app, permanent=True)

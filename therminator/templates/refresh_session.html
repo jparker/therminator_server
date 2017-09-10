@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block title %} Sign in again {% endblock %}
+{% block content %}
+<div class="row">
+  <div class="col-sm-6 col-sm-offset-3">
+    <h1>Therminator <small>Sign in</small></h1>
+    <form method="post" action="{{ url_for("refresh_session") }}">
+      <input type="hidden" name="next" value="{{ target or "" }}">
+      {{ form.csrf_token }}
+      <div class="form-group form-group-lg">
+        <label class="control-label">Email</label>
+        <p class="form-control-static">{{ current_user.email }}</p>
+      </div>
+      <div class="form-group form-group-lg">
+        {{ form.password.label(class="control-label") }}
+        {{ form.password(class="form-control") }}
+      </div>
+      <button type="submit" class="btn btn-primary btn-lg">
+        Sign in again
+      </button>
+    </form>
+  </div>
+</div>
+{% endblock %}

@@ -8,5 +8,8 @@ class SignInForm(FlaskForm):
     password = PasswordField('Password')
     remember = BooleanField('Remember me')
 
+class RefreshSessionForm(FlaskForm):
+    password = PasswordField('Password')
+
 class SensorForm(FlaskForm):
     name = StringField('Name', validators=[DataRequired()])
