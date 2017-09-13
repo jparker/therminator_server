@@ -130,7 +130,11 @@
         {{ reading.ext_temp_f()|round(1) }}&#x2109;
       </td>
       <td class="number">
-        {{ reading.humidity|round(1) }}%
+        {% if reading.humidity %}
+          {{ reading.humidity|round(1) }}%
+        {% else %}
+          <span class="text-muted">&ndash;</span>
+        {% endif %}
       </td>
       <td class="number">
         <div class="pull-left text-muted">
