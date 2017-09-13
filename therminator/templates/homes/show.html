@@ -30,7 +30,13 @@
       {% if sensor.latest_reading() %}
       <h1>
         {{ sensor.latest_reading().ext_temp_f()|round|int }}&#x2109;
-        <small>{{ sensor.latest_reading().humidity|round|int }}%</small>
+        <small>
+          {% if sensor.latest_reading().humidity %}
+            {{ sensor.latest_reading().humidity|round|int }}%
+          {% else %}
+            &ndash;
+          {% endif %}
+        </small>
       </h1>
       <p>
       <small>

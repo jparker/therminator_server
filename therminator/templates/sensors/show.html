@@ -79,7 +79,11 @@
         {% endif %}
         {{ current_sensor.latest_reading().ext_temp_f()|round(1) }}&#x2109;
         /
-        {{ current_sensor.latest_reading().humidity|round(1) }}%
+        {% if current_sensor.latest_reading().humidity %}
+          {{ current_sensor.latest_reading().humidity|round(1) }}%
+        {% else %}
+          &ndash;
+        {% endif %}
         <div class="text-muted">
           {{ current_sensor.latest_reading().timestamp|localtime(timezone=home.timezone) }}
         </div>
